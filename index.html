@@ -114,7 +114,7 @@
 
             // Validate required parameters
             if (!queryParams.key || !queryParams.email || !queryParams.amount) {
-                alert("Missing required parameters: key, email, amount");
+                alert(`${!queryParams.key ? 'Missing key' : ''}${!queryParams.email ? 'Missing email' : ''}${!queryParams.amount ? 'Missing amount' : ''}`);
                 return;
             }
 
