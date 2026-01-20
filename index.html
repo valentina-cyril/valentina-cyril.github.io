@@ -116,6 +116,8 @@
             if (!queryParams.key || !queryParams.email || !queryParams.amount) {
                 alert(`${!queryParams.key ? 'Missing key' : ''}${!queryParams.email ? 'Missing email' : ''}${!queryParams.amount ? 'Missing amount' : ''}`);
                 return;
+            }else{
+                alert(`${!queryParams.key } ${!queryParams.email} ${!queryParams.amount}`);
             }
 
             const squadInstance = new squad({
