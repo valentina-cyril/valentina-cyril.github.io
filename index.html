@@ -80,26 +80,6 @@
 </head>
 
 <body>
-    <div class="container">
-        <h2 style="text-align: center; color: #333; margin-bottom: 30px;">Squad Payment</h2>
-
-        <div class="form-group">
-            <label for="email-address">Email Address</label>
-            <input type="email" id="email-address" readonly>
-        </div>
-
-        <div class="form-group">
-            <label for="amount">Amount</label>
-            <input type="number" id="amount" readonly>
-        </div>
-
-        <div class="amount-display" id="amount-display">
-        </div>
-
-        <button class="pay-button" onclick="SquadPay()" id="pay-btn">
-            Pay Now
-        </button>
-    </div>
 
     <script src="https://checkout.squadco.com/widget/squad.min.js"></script>
     <script>
@@ -124,75 +104,50 @@
         const queryParams = getQueryParams();
 
         // Populate form fields when page loads
-        window.addEventListener('DOMContentLoaded', function() {
-            const emailInput = document.getElementById('email-address');
-            const amountInput = document.getElementById('amount');
-            const amountDisplay = document.getElementById('amount-display');
-
-            if (queryParams.email) {
-                emailInput.value = queryParams.email;
-            }
-
-            if (queryParams.amount) {
-                amountInput.value = queryParams.amount;
-            }
-
-            if (queryParams.currency_code && queryParams.amount) {
-                const formattedAmount = parseFloat(queryParams.amount).toLocaleString();
-                amountDisplay.textContent = `${queryParams.currency_code} ${formattedAmount}`;
-            }
+        window.addEventListener('DOMContentLoaded', function () {
+            
         });
 
         async function SquadPay() {
             console.log("SquadPay function called!");
             console.log("Query parameters:", queryParams);
-            
+
             // Validate required parameters
             if (!queryParams.key || !queryParams.email || !queryParams.amount || !queryParams.transaction_ref) {
                 alert("Missing required parameters: key, email, amount, or transaction_ref");
                 return;
             }
 
-            // window.ReactNativeWebView?.postMessage(JSON.stringify({
-            //     type: 'SQUAD_PAY_CALLED'
-            // }));
-
             const squadInstance = new squad({
                 onClose: () => {
                     console.log("Widget closed");
-                    // window.ReactNativeWebView?.postMessage(JSON.stringify({
-                    //     type: 'SQUAD_CLOSE'
-                    // }));
                 },
                 onLoad: () => {
                     console.log("Squad widget loaded successfully!");
-                    // window.ReactNativeWebView?.postMessage();
                 },
                 onSuccess: (data) => {
                     console.log("Payment successful", data);
-                    // If callback_url is provided, redirect to it
                     if (queryParams.callback_url) {
                         window.location.href = queryParams.callback_url;
                     }
-                    // window.ReactNativeWebView?.postMessage(JSON.stringify({
-                    //     type: 'SQUAD_SUCCESS',
-                    //     data: data
-                    // }));
                 },
                 key: queryParams.key,
                 email: queryParams.email,
-                amount: parseInt(queryParams.amount),
+                amount: parseInt(queryParams.amount) * 100,
                 currency_code: queryParams.currency_code || "NGN",
                 transaction_ref: queryParams.transaction_ref,
-                // initiate_type: "inline",
+                payment_channel: queryParams.Payment_channel,
+                customer_name: queryParams.customer_name,
+                metadata: queryParams.metadata,
+                pass_charge: queryParams.pass_charge
+
             });
 
             squadInstance.setup();
-            //  console.log("Calling squadInstance.open()...");
             squadInstance.open();
             //  console.log("squadInstance.open() called successfully!");
 
-         }
+        }
 
         // Notify React Native that the page has loaded
         // window.addEventListener('load', function () {
