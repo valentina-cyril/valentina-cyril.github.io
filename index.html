@@ -113,8 +113,8 @@
             console.log("Query parameters:", queryParams);
 
             // Validate required parameters
-            if (!queryParams.key || !queryParams.email || !queryParams.amount || !queryParams.transaction_ref) {
-                alert("Missing required parameters: key, email, amount, or transaction_ref");
+            if (!queryParams.key || !queryParams.email || !queryParams.amount) {
+                alert("Missing required parameters: key, email, amount");
                 return;
             }
 
