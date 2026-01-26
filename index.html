@@ -118,9 +118,7 @@
             if (!queryParams.key || !queryParams.email || !queryParams.amount) {
                 alert(`${!queryParams.key ? 'Missing key' : ''}${!queryParams.email ? 'Missing email' : ''}${!queryParams.amount ? 'Missing amount' : ''}`);
                 return;
-            } else {
-                alert(`${!queryParams.key} ${!queryParams.email} ${!queryParams.amount}`);
-            }
+            } 
 
             const squadInstance = new squad({
                 onClose: () => {
@@ -143,7 +141,7 @@
                 payment_channel: queryParams.Payment_channel,
                 customer_name: queryParams.customer_name,
                 metadata: queryParams.metadata,
-                pass_charge: queryParams.pass_charge
+                pass_charge: queryParams.pass_charge ?? false
 
             });
 
