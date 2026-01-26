@@ -121,8 +121,12 @@
             } 
 
             const squadInstance = new squad({
-                onClose: () => {
-                    console.log("Widget closed");
+                onClose: (data) => {
+                    console.log("Widget closed",data);
+                    window.ReactNativeWebView?.postMessage(JSON.stringify({
+                        type: 'SQUAD_CLOSED',
+                        data: data
+                    }));
                 },
                 onLoad: () => {
                     console.log("Squad widget loaded successfully!");
