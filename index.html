@@ -133,9 +133,10 @@
                 },
                 onSuccess: (data) => {
                     console.log("Payment successful", data);
-                    if (queryParams.callback_url) {
-                        window.location.href = queryParams.callback_url;
-                    }
+                    window.ReactNativeWebView?.postMessage(JSON.stringify({
+                        type: 'SUCCESS_PAYMENT',
+                        data: data
+                    }));
                 },
                 key: queryParams.key,
                 email: queryParams.email,
