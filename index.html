@@ -4,79 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Squad Payment</title>
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f5f5f5;
-        }
-
-        .container {
-            max-width: 400px;
-            margin: 0 auto;
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #333;
-        }
-
-        input {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e1e1e1;
-            border-radius: 8px;
-            font-size: 16px;
-            box-sizing: border-box;
-        }
-
-        input:focus {
-            outline: none;
-            border-color: #007AFF;
-        }
-
-        .pay-button {
-            width: 100%;
-            background: #007AFF;
-            color: white;
-            border: none;
-            padding: 15px;
-            border-radius: 8px;
-            font-size: 18px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-
-        .pay-button:hover {
-            background: #0056CC;
-        }
-
-        .pay-button:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-        }
-
-        .amount-display {
-            font-size: 24px;
-            font-weight: bold;
-            color: #007AFF;
-            text-align: center;
-            margin: 20px 0;
-        }
-    </style>
+    <title>Squad Payment react native webview solution by valenvivv</title>
 </head>
 
 <body>
@@ -90,13 +18,13 @@
                 key: params.get('key'),
                 email: params.get('email'),
                 amount: params.get('amount'),
-                transaction_ref: params.get('transaction_ref'),
-                currency_code: params.get('currency_code'),
-                Payment_channel: params.get('Payment_channel'),
-                customer_name: params.get('customer_name'),
-                callback_url: params.get('callback_url'),
+                transaction_ref: params.get('transactionRef'),
+                currency_code: params.get('currencyCode'),
+                Payment_channels: params.get('payment_channels'),
+                customer_name: params.get('customerName'),
+                callback_url: params.get('customerName'),
                 metadata: params.get('metadata'),
-                pass_charge: params.get('pass_charge')
+                pass_charge: params.get('passCharge')
             };
         }
 
@@ -111,26 +39,34 @@
         async function SquadPay() {
             console.log("SquadPay function called!");
             console.log("Query parameters:", queryParams);
-            alert(`${queryParams.key} ${queryParams.email} ${queryParams.amount}`);
-            alert(`Please show at alll`);
+            // alert(`${queryParams.key} ${queryParams.email} ${queryParams.amount}`);
+            // alert(`Please show at alll`);
 
             // Validate required parameters
-            if (!queryParams.key || !queryParams.email || !queryParams.amount) {
-                alert(`${!queryParams.key ? 'Missing key' : ''}${!queryParams.email ? 'Missing email' : ''}${!queryParams.amount ? 'Missing amount' : ''}`);
+            if (!queryParams.key || !queryParams.email || !queryParams.amount || !queryParams.currency_code) {
+                alert(`${!queryParams.key ? 'Missing key' : ''}, ${!queryParams.email ? 'Missing email' : ''}, ${!queryParams.amount ? 'Missing amount' : ''}, ${!queryParams.currency_code ? 'Missing currency code' : ''}`);
+
+                window.ReactNativeWebView?.postMessage(JSON.stringify({
+                    type: 'SQUAD_CLOSE',
+                    data: `${!queryParams.key ? 'Missing key' : ''}, ${!queryParams.email ? 'Missing email' : ''}, ${!queryParams.amount ? 'Missing amount' : ''}, ${!queryParams.currency_code ? 'Missing currency code' : ''}`
+                }));
                 return;
-            } 
+            }
 
             const squadInstance = new squad({
+
                 onClose: (data) => {
-                    console.log("Widget closed",data);
+                    console.log("Widget closed", data);
                     window.ReactNativeWebView?.postMessage(JSON.stringify({
-                        type: 'SQUAD_CLOSED',
+                        type: 'SQUAD_CLOSE',
                         data: data
                     }));
                 },
+
                 onLoad: () => {
                     console.log("Squad widget loaded successfully!");
                 },
+
                 onSuccess: (data) => {
                     console.log("Payment successful", data);
                     window.ReactNativeWebView?.postMessage(JSON.stringify({
@@ -138,6 +74,7 @@
                         data: data
                     }));
                 },
+
                 key: queryParams.key,
                 email: queryParams.email,
                 amount: parseInt(queryParams.amount) * 100,
