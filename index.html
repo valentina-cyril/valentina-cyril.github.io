@@ -24,7 +24,7 @@
                 customer_name: params.get('customerName'),
                 callback_url: params.get('customerName'),
                 metadata: params.get('metadata'),
-                pass_charge: params.get('passCharge')
+                pass_charge: params.get('passCharge') === 'true'
             };
         }
 
@@ -83,7 +83,7 @@
                 payment_channel: queryParams.Payment_channel,
                 customer_name: queryParams.customer_name,
                 metadata: queryParams.metadata,
-                pass_charge: queryParams.pass_charge ?? false
+                pass_charge: queryParams.pass_charge
 
             });
 
